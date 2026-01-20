@@ -1,0 +1,73 @@
+# Environment files
+# .env - Keep .env in build, it's needed for Laravel
+.env.local
+.env.*.local
+
+# IDE and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Version control
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+docs/
+Documentation.html
+
+# Testing
+tests/
+phpunit.xml
+.phpunit.result.cache
+.phpunit.cache/
+
+# Development tools
+.editorconfig
+.styleci.yml
+.php-cs-fixer.php
+phpstan.neon
+
+# Node development
+node_modules/
+.npm
+
+# Logs
+*.log
+storage/logs/*
+!storage/logs/.gitignore
+
+# Cache
+storage/framework/cache/*
+!storage/framework/cache/.gitignore
+storage/framework/sessions/*
+!storage/framework/sessions/.gitignore
+storage/framework/views/*
+!storage/framework/views/.gitignore
+bootstrap/cache/*
+!bootstrap/cache/.gitignore
+
+# Compiled assets (we build fresh in Docker)
+public/build/
+public/hot
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Vendor (installed in Docker)
+vendor/
+
+# Sail (using custom Docker setup)
+docker-compose.sail.yml
+
+# Build scripts
+build_*.sh
+update_documentation.sh
+optimize_png_images.sh
+*.puml
+diagrams/

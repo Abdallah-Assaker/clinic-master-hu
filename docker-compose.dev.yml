@@ -1,0 +1,32 @@
+# ============================================
+# Docker Compose - Development Override
+# ============================================
+# Use with: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+# Or just: docker compose --profile tools up
+# ============================================
+
+services:
+  # Override app service for development
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - LOG_LEVEL=debug
+    volumes:
+      # Mount source code for live editing
+      - .:/var/www/html:cached
+      - /var/www/html/vendor
+      - /var/www/html/node_modules
+    ports:
+      - "${APP_PORT:-8000}:80"
+      - "5173:5173"  # Vite HMR
+
+  # Enable all tools in development
+  phpmyadmin:
+    profiles: []  # Remove profile restriction
+
+  mailpit:
+    profiles: []  # Remove profile restriction

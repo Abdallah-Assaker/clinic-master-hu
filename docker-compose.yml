@@ -1,0 +1,179 @@
+# ============================================
+# Docker Compose - Clinic Management System
+# ============================================
+# This file orchestrates all services needed
+# to run the Medical Clinic Management System
+# ============================================
+
+services:
+  # ==========================================
+  # Laravel Application
+  # ==========================================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: clinic-app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8000}:80"
+    environment:
+      - APP_NAME=${APP_NAME:-ClinicMaster}
+      - APP_ENV=${APP_ENV:-local}
+      - APP_DEBUG=${APP_DEBUG:-true}
+      - APP_URL=${APP_URL:-http://localhost:8000}
+      - APP_LOCALE=${APP_LOCALE:-ar}
+      - APP_FALLBACK_LOCALE=${APP_FALLBACK_LOCALE:-ar}
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE:-clinic_master}
+      - DB_USERNAME=${DB_USERNAME:-clinic_user}
+      - DB_PASSWORD=${DB_PASSWORD:-clinic_secret}
+      - REDIS_HOST=redis
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-null}
+      - REDIS_PORT=6379
+      - CACHE_STORE=${CACHE_STORE:-redis}
+      - SESSION_DRIVER=${SESSION_DRIVER:-redis}
+      - QUEUE_CONNECTION=${QUEUE_CONNECTION:-redis}
+      - MAIL_MAILER=${MAIL_MAILER:-smtp}
+      - MAIL_HOST=${MAIL_HOST:-mailpit}
+      - MAIL_PORT=${MAIL_PORT:-1025}
+      - MAIL_USERNAME=${MAIL_USERNAME:-null}
+      - MAIL_PASSWORD=${MAIL_PASSWORD:-null}
+      - MAIL_ENCRYPTION=${MAIL_ENCRYPTION:-null}
+      - MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS:-noreply@clinic.local}
+      - MAIL_FROM_NAME=${MAIL_FROM_NAME:-${APP_NAME:-ClinicMaster}}
+      - STRIPE_KEY=${STRIPE_KEY:-}
+      - STRIPE_SECRET=${STRIPE_SECRET:-}
+    volumes:
+      # Persist storage (uploads, logs, cache)
+      - clinic-storage:/var/www/html/storage/app
+      - clinic-logs:/var/www/html/storage/logs
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - clinic-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # ==========================================
+  # MySQL Database
+  # ==========================================
+  db:
+    image: mysql:8.0
+    container_name: clinic-db
+    restart: unless-stopped
+    ports:
+      - "${DB_EXTERNAL_PORT:-3306}:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_secret}
+      MYSQL_DATABASE: ${DB_DATABASE:-clinic_master}
+      MYSQL_USER: ${DB_USERNAME:-clinic_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-clinic_secret}
+    volumes:
+      - clinic-db-data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    command: >
+      --default-authentication-plugin=caching_sha2_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+    networks:
+      - clinic-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD:-root_secret}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # ==========================================
+  # Redis Cache
+  # ==========================================
+  redis:
+    image: redis:7-alpine
+    container_name: clinic-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_EXTERNAL_PORT:-6379}:6379"
+    volumes:
+      - clinic-redis-data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - clinic-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ==========================================
+  # phpMyAdmin (Optional - Database UI)
+  # ==========================================
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: clinic-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "${PHPMYADMIN_PORT:-8080}:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: ${DB_ROOT_PASSWORD:-root_secret}
+      UPLOAD_LIMIT: 64M
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - clinic-network
+    profiles:
+      - tools
+
+  # ==========================================
+  # Mailpit (Email Testing - Development)
+  # ==========================================
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: clinic-mailpit
+    restart: unless-stopped
+    ports:
+      - "${MAILPIT_HTTP_PORT:-8025}:8025"
+      - "${MAILPIT_SMTP_PORT:-1025}:1025"
+    networks:
+      - clinic-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8025/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+# ==========================================
+# Networks
+# ==========================================
+networks:
+  clinic-network:
+    driver: bridge
+    name: clinic-network
+
+# ==========================================
+# Volumes (Persistent Storage)
+# ==========================================
+volumes:
+  clinic-db-data:
+    name: clinic-db-data
+  clinic-redis-data:
+    name: clinic-redis-data
+  clinic-storage:
+    name: clinic-storage
+  clinic-logs:
+    name: clinic-logs

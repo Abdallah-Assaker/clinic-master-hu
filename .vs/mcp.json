@@ -1,0 +1,18 @@
+{
+  "servers": {
+       "filesystem": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "--mount",
+        "type=bind,src=C:\\Users\\abdal\\Courses\\clinic-master-hu,dst=/projects/workspace",
+        "mcp/filesystem",
+        "/projects"
+      ],
+      "type": "stdio"
+    }
+  },
+  "inputs": []
+}

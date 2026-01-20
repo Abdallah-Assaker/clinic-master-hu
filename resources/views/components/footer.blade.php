@@ -83,11 +83,11 @@
                                 <div class="team-details">
                                     <span class="team-label">Submitted by</span>
                                     <div class="team-members">
-                                        <span class="team-member">1. Wael Mohamed Abo-Samra</span>
-                                        <span class="team-member">2. Ahmed Nabieh Makled</span>
-                                        <span class="team-member">3. Mohamed Yahia Sayed</span>
-                                        <span class="team-member">4. Hemdan Souedy Mohamed</span>
-                                        <span class="team-member">5. Amany Samy Mohamed</span>
+                                        <span class="team-member">1. Abdallah Assaker</span>
+                                        <span class="team-member">2. Alaa Abd El Keriem</span>
+                                        <span class="team-member">3. Ahmed Tarek</span>
+                                        <span class="team-member">4. Mohamed Kamal</span>
+                                        <span class="team-member">5. Khaled Waleed</span>
                                     </div>
                                 </div>
                             </div>
@@ -98,7 +98,7 @@
                                 </div>
                                 <div class="team-details">
                                     <span class="team-label">Supervised by</span>
-                                    <span class="team-value supervisor">Dr. Zeinab Ezz-Elarab</span>
+                                    <span class="team-value supervisor">Dr. Ahmed Hesham</span>
                                 </div>
                             </div>
 
