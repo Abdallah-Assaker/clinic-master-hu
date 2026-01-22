@@ -137,9 +137,9 @@
                     <div class="support-content">
                         <p>هل تواجه مشكلة أو لديك استفسار بخصوص حجزك؟</p>
                         <div class="support-options">
-                            <a href="tel:+201066181942" class="support-option">
+                            <a href="tel:+201020114717" class="support-option">
                                 <i class="bi bi-telephone-fill"></i>
-                                <span>+201066181942</span>
+                                <span>+201020114717</span>
                             </a>
                             <a href="mailto:support@clinic.com" class="support-option">
                                 <i class="bi bi-envelope-fill"></i>
@@ -362,7 +362,7 @@
                                 <ul class="instructions-list">
                                     <li>
                                         <span class="instruction-icon"><i class="bi bi-telephone"></i></span>
-                                        <span>في حالة وجود استفسارات يمكنك التواصل عبر رقم الدعم: +201066181942</span>
+                                        <span>في حالة وجود استفسارات يمكنك التواصل عبر رقم الدعم: +201020114717</span>
                                     </li>
                                     <li>
                                         <span class="instruction-icon"><i class="bi bi-envelope"></i></span>

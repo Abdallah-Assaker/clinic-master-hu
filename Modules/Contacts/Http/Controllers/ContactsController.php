@@ -52,7 +52,7 @@ class ContactsController extends Controller
             ])->render();
 
             Mail::html($emailContent, function($message) use ($validated) {
-                $message->to(env('CONTACT_ADMIN_EMAIL', 'ahmed.makled@live.com'))
+                $message->to(env('CONTACT_ADMIN_EMAIL', 'abdallahassaker@gmail.com'))
                         ->subject('رسالة جديدة من نموذج الاتصال: ' . $validated['subject'])
                         ->from($validated['email'], $validated['name']);
             });

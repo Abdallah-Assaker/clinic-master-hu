@@ -14,7 +14,7 @@ class AdminSeeder extends Seeder
             ['email' => 'admin@clinic.com'],
             [
                 'name' => 'Admin',
-                'phone_number' => '01066181943',
+                'phone_number' => '01020114717',
                 'password' => Hash::make('password'),
                 'status' => true
             ]
@@ -22,11 +22,11 @@ class AdminSeeder extends Seeder
         $admin->assignRole('Admin');
 
         $secondAdmin = User::firstOrCreate(
-            ['email' => 'ahmed.makled@live.com'],
+            ['email' => 'abdallahassaker@gmail.com'],
             [
-                'name' => 'Ahmed Makled',
-                'phone_number' => '01066181942',
-                'password' => Hash::make('01066181942'),
+                'name' => 'Abdallah Assaker',
+                'phone_number' => '01020114717',
+                'password' => Hash::make('01020114717'),
                 'status' => true
             ]
         );
